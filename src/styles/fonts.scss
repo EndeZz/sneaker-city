@@ -1,0 +1,36 @@
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: local(''),
+       url('@/assets/fonts/Roboto-regular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('@/assets/fonts/Roboto-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+
+}
+
+@font-face {
+  font-family: 'GoogleSans';
+  font-style: normal;
+  font-weight: 400;
+  src: local(''),
+       url('@/assets/fonts/GoogleSans-Regular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('@/assets/fonts/GoogleSans-Regular.ttf') format('truetype'), /* Safari, Android, iOS */
+}
+
+@font-face {
+  font-family: 'GoogleSans';
+  font-style: normal;
+  font-weight: 500;
+  src: local(''),
+       url('@/assets/fonts/GoogleSans-Medium.woff2') format('woff2'), /* Super Modern Browsers */
+       url('@/assets/fonts/GoogleSans-Medium.ttf') format('truetype'), /* Safari, Android, iOS */
+}
+
+@font-face {
+  font-family: 'GoogleSans';
+  font-style: normal;
+  font-weight: 700;
+  src: local(''),
+       url('@/assets/fonts/GoogleSans-Bold.woff2') format('woff2'), /* Super Modern Browsers */
+       url('@/assets/fonts/GoogleSans-Bold.ttf') format('truetype'), /* Safari, Android, iOS */
+}
