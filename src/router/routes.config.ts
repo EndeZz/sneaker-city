@@ -8,6 +8,14 @@ export const routes: Array<RouteRecordRaw> = [
     path: routePath.home.path,
     name: routePath.home.name,
     component: HomeView,
+    children: [
+      {
+        path: ":category",
+        name: "Categories",
+        props: true,
+        component: HomeView,
+      },
+    ],
   },
   {
     path: routePath.cart.path,

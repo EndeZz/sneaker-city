@@ -14,7 +14,7 @@
 
 <script lang="ts" setup>
 import { routePath } from "@/router/route-path";
-import AtomLink from "../atoms/AtomLink.vue";
+import AtomLink from "@/components/atoms/AtomLink.vue";
 </script>
 
 <style lang="scss" scoped>

@@ -1,14 +1,24 @@
 <template>
   <div class="routes">
-    <AtomLink :path="routePath.home.path" class="routes__link_category">
-      Home
+    <AtomLink
+      v-for="category in categories"
+      :key="category"
+      :path="category"
+      class="routes__link_category"
+    >
+      {{ category }}
     </AtomLink>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { routePath } from "@/router/route-path";
-import AtomLink from "../atoms/AtomLink.vue";
+import AtomLink from "@/components/atoms/AtomLink.vue";
+import { onMounted } from "vue";
+import { useFetchCategories } from "@/hooks/useFetchCategories";
+
+const { categories, fetchCategories } = useFetchCategories();
+
+onMounted(fetchCategories);
 </script>
 
 <style lang="scss" scoped>
