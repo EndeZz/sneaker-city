@@ -1,13 +1,13 @@
 <template>
   <div class="contacts">
     <AtomLink :path="routePath.cart.path" class="contacts-item">
-      <img src="@/assets/images/fi_shopping-cart.svg" />
+      <img src="@/assets/images/icons/fi_shopping-cart.svg" />
     </AtomLink>
     <AtomLink :path="routePath.cart.path" class="contacts-item">
-      <img src="@/assets/images/fi_heart.svg" />
+      <img src="@/assets/images/icons/fi_heart.svg" />
     </AtomLink>
     <AtomLink :path="routePath.cart.path" class="contacts-item">
-      <img src="@/assets/images/fi_user.svg" />
+      <img src="@/assets/images/icons/fi_user.svg" />
     </AtomLink>
   </div>
 </template>

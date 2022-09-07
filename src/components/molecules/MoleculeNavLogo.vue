@@ -4,7 +4,7 @@
     <AtomLink :path="routePath.home.path">
       <img
         class="logo__image"
-        src="@/assets/images/logo.svg"
+        src="@/assets/images/icons/logo.svg"
         alt="Sneaker City Logotype"
       />
       <p class="logo__title">SC.</p>
