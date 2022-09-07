@@ -42,7 +42,15 @@ defineProps<IMoleculeCardProps>();
     }
 
     &-block {
-      background-color: $color-gray-04;
+      background-color: $color-white;
+      border-radius: 30px;
+      border: 1px solid $color-gray-04;
+      transition: all 0.2s ease;
+      cursor: pointer;
+
+      &:hover {
+        transform: scale(1.05);
+      }
     }
   }
 
