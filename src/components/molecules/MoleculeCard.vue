@@ -2,7 +2,7 @@
   <li class="card__item">
     <figure class="card__figure">
       <div class="card__img-block">
-        <img :src="image" alt="" class="card__img-pic" />
+        <img :src="image" :alt="title" class="card__img-pic" />
       </div>
 
       <figcaption class="card__info">
@@ -36,12 +36,16 @@ defineProps<IMoleculeCardProps>();
   &__img {
     &-pic {
       max-width: 310px;
-      width: 100%;
-      height: 310px;
+      width: 70%;
+      height: 308px;
       object-fit: contain;
     }
 
     &-block {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
       background-color: $color-white;
       border-radius: 30px;
       border: 1px solid $color-gray-04;
@@ -59,6 +63,12 @@ defineProps<IMoleculeCardProps>();
     flex-direction: column;
     gap: 8px;
     margin-top: 24px;
+  }
+
+  &__caption {
+    @include font_config(400, 1.6rem, 2.4rem);
+
+    color: $color-gray-65;
   }
 }
 </style>
