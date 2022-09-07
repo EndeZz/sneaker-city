@@ -3,20 +3,11 @@
     <OrganismSidebar />
 
     <section class="content">
-      <h2 class="content__title">The new arrivals</h2>
+      <h2 class="content__title">{{ categoryTitle ?? "The new arrivals" }}</h2>
 
-      <ul v-if="categoryName" class="card">
+      <ul class="card">
         <MoleculeCard
-          v-for="product in currentCategoryProducts"
-          :key="product.id"
-          :title="product.title"
-          :price="product.price"
-          :image="product.image"
-        />
-      </ul>
-      <ul v-else class="card">
-        <MoleculeCard
-          v-for="product in productItems"
+          v-for="product in currentProducts"
           :key="product.id"
           :title="product.title"
           :price="product.price"
@@ -25,25 +16,41 @@
       </ul>
     </section>
   </main>
+
+  <AtomModal v-if="isLoading" classes="modal__loader"><AtomLoader /></AtomModal>
 </template>
 
 <script lang="ts" setup>
 import OrganismSidebar from "@/components/organisms/OrganismSidebar.vue";
 import MoleculeCard from "@/components/molecules/MoleculeCard.vue";
-import { computed, onMounted } from "vue";
-import { useFetchProducts } from "@/hooks/useFetchProducts";
+import { computed, onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
+import { IProducts } from "@/models/product.interfaces";
+import { fetchProductsByCategory } from "@/utils/api/apiRequests";
+import AtomModal from "@/components/atoms/AtomModal.vue";
+import AtomLoader from "@/components/atoms/AtomLoader.vue";
 
-const { productItems, fetchProductsData } = useFetchProducts();
 const route = useRoute();
-const categoryName = route.params.category;
-
-const currentCategoryProducts = computed(() =>
-  productItems.value.filter((product) => product.category === categoryName)
+const categoryName = computed(() => route.params.category as string);
+const categoryTitle = computed(
+  () =>
+    categoryName.value &&
+    categoryName.value.charAt(0).toUpperCase() + categoryName.value.slice(1)
 );
 
-onMounted(() => {
-  fetchProductsData();
+const currentProducts = ref<IProducts[]>([]);
+const isLoading = ref<boolean>(true);
+
+onMounted(async () => {
+  isLoading.value = true;
+  currentProducts.value = await fetchProductsByCategory(categoryName.value);
+  isLoading.value = false;
+});
+
+watch(categoryName, async () => {
+  isLoading.value = true;
+  currentProducts.value = await fetchProductsByCategory(categoryName.value);
+  isLoading.value = false;
 });
 </script>
 
@@ -71,5 +78,9 @@ onMounted(() => {
   flex-wrap: wrap;
   gap: 64px 24px;
   margin-top: 32px;
+}
+
+.modal__loader {
+  background-color: $color-loader-bg;
 }
 </style>

@@ -13,12 +13,14 @@
 
 <script lang="ts" setup>
 import AtomLink from "@/components/atoms/AtomLink.vue";
-import { onMounted } from "vue";
-import { useFetchCategories } from "@/hooks/useFetchCategories";
+import { onMounted, ref } from "vue";
+import { fetchCategories } from "@/utils/api/apiRequests";
 
-const { categories, fetchCategories } = useFetchCategories();
+const categories = ref<string[]>([]);
 
-onMounted(fetchCategories);
+onMounted(async () => {
+  categories.value = await fetchCategories();
+});
 </script>
 
 <style lang="scss" scoped>
