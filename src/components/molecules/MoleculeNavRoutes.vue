@@ -6,7 +6,7 @@
       :path="category"
       class="routes__link_category"
     >
-      {{ category }}
+      {{ category.charAt(0).toUpperCase() + category.slice(1) }}
     </AtomLink>
   </div>
 </template>
