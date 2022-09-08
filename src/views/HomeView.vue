@@ -28,6 +28,7 @@ import { useRoute } from "vue-router";
 import AtomModal from "@/components/atoms/AtomModal.vue";
 import AtomLoader from "@/components/atoms/AtomLoader.vue";
 import { useContentOnPage } from "@/hooks/useContentOnPage";
+import { IFilteredProducts } from "@/models/product.interfaces";
 
 const { updateContentOnPage, currentProducts, filteredProducts, isLoading } =
   useContentOnPage();
@@ -40,10 +41,12 @@ const categoryTitle = computed(
     categoryName.value.charAt(0).toUpperCase() + categoryName.value.slice(1)
 );
 
-const handleFilterProducts = (filterOptions: number[]) => {
+const handleFilterProducts = (filterOptions: IFilteredProducts) => {
   filteredProducts.value = currentProducts.value.filter(
     (product) =>
-      product.price >= filterOptions[0] && product.price <= filterOptions[1]
+      product.price >= filterOptions.price[0] &&
+      product.price <= filterOptions.price[1] &&
+      product.rating.rate >= filterOptions.rating
   );
 };
 

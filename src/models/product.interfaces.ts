@@ -13,7 +13,7 @@ export interface IProducts {
   rating: IRating;
 }
 
-export interface IProductPrice {
-  min: number;
-  max: number;
+export interface IFilteredProducts {
+  price: number[];
+  rating: number;
 }

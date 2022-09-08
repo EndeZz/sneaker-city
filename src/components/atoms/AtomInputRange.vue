@@ -5,7 +5,7 @@
     :min="minValue"
     :tooltips="tooltips"
     :lazy="false"
-    :step="10"
+    :step="step"
     @input="handleUpdate"
     class="range__slider"
   />
@@ -13,17 +13,18 @@
 
 <script lang="ts" setup>
 import Slider from "@vueform/slider";
-import { toRefs } from "vue";
 
 interface IAtomInputRange {
-  modelValue: number[];
+  modelValue: number[] | number;
   maxValue: number;
   minValue: number;
   tooltips?: boolean;
+  step?: number;
 }
-const props = withDefaults(defineProps<IAtomInputRange>(), { tooltips: false });
-
-const { modelValue } = toRefs(props);
+withDefaults(defineProps<IAtomInputRange>(), {
+  tooltips: false,
+  step: 10,
+});
 
 const emit = defineEmits(["update:modelValue", "setFilter"]);
 

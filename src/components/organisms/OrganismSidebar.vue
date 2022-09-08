@@ -2,6 +2,19 @@
   <aside class="sidebar">
     <section class="sidebar__section">
       <h3 class="sidebar__title">Rating</h3>
+
+      <div class="range">
+        <AtomInputRange
+          v-model="ratingValue"
+          :maxValue="maxRating"
+          :minValue="minRating"
+          :step="1"
+          @setFilter="handleUpdateFilter"
+        />
+        <div class="range__info">
+          <p class="range__caption">{{ ratingValue }}</p>
+        </div>
+      </div>
     </section>
 
     <section class="sidebar__section">
@@ -9,14 +22,14 @@
 
       <div class="range">
         <AtomInputRange
-          v-model="rangeValue"
-          :maxValue="maxValue"
-          :minValue="minValue"
+          v-model="priceValue"
+          :maxValue="maxPrice"
+          :minValue="minPrice"
           @setFilter="handleUpdateFilter"
         />
         <div class="range__info">
-          <p class="range__caption">{{ rangeValue[0] }}$</p>
-          <p class="range__caption">{{ rangeValue[1] }}$</p>
+          <p class="range__caption">{{ priceValue[0] }}$</p>
+          <p class="range__caption">{{ priceValue[1] }}$</p>
         </div>
       </div>
     </section>
@@ -24,17 +37,26 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 import AtomInputRange from "@/components/atoms/AtomInputRange.vue";
 
-const minValue = ref(0);
-const maxValue = ref(200);
-const rangeValue = ref([minValue.value, maxValue.value]);
+const minPrice = ref(0);
+const maxPrice = ref(200);
+const priceValue = ref([minPrice.value, maxPrice.value]);
+
+const minRating = ref(0);
+const maxRating = ref(5);
+const ratingValue = ref(0);
+
+const filterOptions = reactive({
+  price: priceValue,
+  rating: ratingValue,
+});
 
 const emit = defineEmits(["setFilter"]);
 
 const handleUpdateFilter = () => {
-  emit("setFilter", rangeValue.value);
+  emit("setFilter", filterOptions);
 };
 </script>
 
