@@ -1,13 +1,13 @@
 <template>
   <main class="main container">
-    <OrganismSidebar />
+    <OrganismSidebar @setFilter="handleFilterProducts" />
 
     <section class="content">
       <h2 class="content__title">{{ categoryTitle ?? "The new arrivals" }}</h2>
 
       <ul v-if="!isLoading" class="card">
         <MoleculeCard
-          v-for="product in currentProducts"
+          v-for="product in filteredProducts"
           :key="product.id"
           :title="product.title"
           :price="product.price"
@@ -23,12 +23,14 @@
 <script lang="ts" setup>
 import OrganismSidebar from "@/components/organisms/OrganismSidebar.vue";
 import MoleculeCard from "@/components/molecules/MoleculeCard.vue";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
-import { IProducts } from "@/models/product.interfaces";
-import { fetchProductsByCategory } from "@/utils/api/apiRequests";
 import AtomModal from "@/components/atoms/AtomModal.vue";
 import AtomLoader from "@/components/atoms/AtomLoader.vue";
+import { useContentOnPage } from "@/hooks/useContentOnPage";
+
+const { updateContentOnPage, currentProducts, filteredProducts, isLoading } =
+  useContentOnPage();
 
 const route = useRoute();
 const categoryName = computed(() => route.params.category as string);
@@ -38,20 +40,15 @@ const categoryTitle = computed(
     categoryName.value.charAt(0).toUpperCase() + categoryName.value.slice(1)
 );
 
-const currentProducts = ref<IProducts[]>([]);
-const isLoading = ref<boolean>(true);
+const handleFilterProducts = (filterOptions: number[]) => {
+  filteredProducts.value = currentProducts.value.filter(
+    (product) =>
+      product.price >= filterOptions[0] && product.price <= filterOptions[1]
+  );
+};
 
-onMounted(async () => {
-  isLoading.value = true;
-  currentProducts.value = await fetchProductsByCategory(categoryName.value);
-  isLoading.value = false;
-});
-
-watch(categoryName, async () => {
-  isLoading.value = true;
-  currentProducts.value = await fetchProductsByCategory(categoryName.value);
-  isLoading.value = false;
-});
+onMounted(() => updateContentOnPage(categoryName.value));
+watch(categoryName, () => updateContentOnPage(categoryName.value));
 </script>
 
 <style lang="scss">
