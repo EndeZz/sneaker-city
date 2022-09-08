@@ -1,44 +1,37 @@
 <template>
   <aside class="sidebar">
-    <section class="sidebar__section">
-      <h3 class="sidebar__title">Rating</h3>
-
-      <div class="range">
-        <AtomInputRange
-          v-model="ratingValue"
-          :maxValue="maxRating"
-          :minValue="minRating"
-          :step="1"
-          @setFilter="handleUpdateFilter"
-        />
-        <div class="range__info">
-          <p class="range__caption">{{ ratingValue }}</p>
-        </div>
+    <MoleculeRangeBlock title="Rating range">
+      <AtomInputRange
+        v-model="ratingValue"
+        :maxValue="maxRating"
+        :minValue="minRating"
+        :step="1"
+        @setFilter="handleUpdateFilter"
+      />
+      <div class="range__info">
+        <p class="range__caption">{{ ratingValue }}</p>
       </div>
-    </section>
+    </MoleculeRangeBlock>
 
-    <section class="sidebar__section">
-      <h3 class="sidebar__title">Price range</h3>
-
-      <div class="range">
-        <AtomInputRange
-          v-model="priceValue"
-          :maxValue="maxPrice"
-          :minValue="minPrice"
-          @setFilter="handleUpdateFilter"
-        />
-        <div class="range__info">
-          <p class="range__caption">{{ priceValue[0] }}$</p>
-          <p class="range__caption">{{ priceValue[1] }}$</p>
-        </div>
+    <MoleculeRangeBlock title="Price range">
+      <AtomInputRange
+        v-model="priceValue"
+        :maxValue="maxPrice"
+        :minValue="minPrice"
+        @setFilter="handleUpdateFilter"
+      />
+      <div class="range__info">
+        <p class="range__caption">{{ priceValue[0] }}$</p>
+        <p class="range__caption">{{ priceValue[1] }}$</p>
       </div>
-    </section>
+    </MoleculeRangeBlock>
   </aside>
 </template>
 
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import AtomInputRange from "@/components/atoms/AtomInputRange.vue";
+import MoleculeRangeBlock from "../molecules/MoleculeRangeBlock.vue";
 
 const minPrice = ref(0);
 const maxPrice = ref(200);
@@ -68,19 +61,6 @@ const handleUpdateFilter = () => {
 
 .sidebar {
   min-width: 260px;
-
-  &__section {
-    padding: 32px;
-    border-bottom: 1px solid $color-gray-15;
-
-    &:last-child {
-      border-bottom: none;
-    }
-  }
-
-  &__title {
-    @include font_config(400, 1.6rem, 2.4rem);
-  }
 }
 
 .brand {
