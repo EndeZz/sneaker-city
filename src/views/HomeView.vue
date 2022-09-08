@@ -5,7 +5,7 @@
     <section class="content">
       <h2 class="content__title">{{ categoryTitle ?? "The new arrivals" }}</h2>
 
-      <ul class="card">
+      <ul v-if="!isLoading" class="card">
         <MoleculeCard
           v-for="product in currentProducts"
           :key="product.id"
