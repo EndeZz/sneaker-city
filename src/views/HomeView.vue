@@ -14,6 +14,8 @@
           :image="product.image"
         />
       </ul>
+
+      <OrganismFooter />
     </section>
   </main>
 
@@ -29,6 +31,7 @@ import AtomModal from "@/components/atoms/AtomModal.vue";
 import AtomLoader from "@/components/atoms/AtomLoader.vue";
 import { useContentOnPage } from "@/hooks/useContentOnPage";
 import { IFilteredProducts } from "@/models/product.interfaces";
+import OrganismFooter from "@/components/organisms/OrganismFooter.vue";
 
 const { updateContentOnPage, currentProducts, filteredProducts, isLoading } =
   useContentOnPage();
