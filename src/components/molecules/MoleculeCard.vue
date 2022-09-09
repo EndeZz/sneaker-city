@@ -6,7 +6,7 @@
       </div>
 
       <figcaption class="card__info">
-        <h3 class="card__title">J{{ title }}</h3>
+        <h3 class="card__title">{{ title }}</h3>
         <p class="card__caption">{{ price }}$</p>
       </figcaption>
     </figure>
@@ -15,6 +15,7 @@
 
 <script lang="ts" setup>
 interface IMoleculeCardProps {
+  id: number;
   title: string;
   price: number;
   image: string;

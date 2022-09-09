@@ -5,10 +5,11 @@
     <section class="content">
       <h2 class="content__title">{{ categoryTitle ?? "The new arrivals" }}</h2>
 
-      <ul v-if="!isLoading" class="card">
+      <ul v-if="!store.isLoading" class="cards">
         <MoleculeCard
-          v-for="product in filteredProducts"
+          v-for="product in store.filteredProducts"
           :key="product.id"
+          :id="product.id"
           :title="product.title"
           :price="product.price"
           :image="product.image"
@@ -19,24 +20,25 @@
     </section>
   </main>
 
-  <AtomModal v-if="isLoading" classes="modal__loader"><AtomLoader /></AtomModal>
+  <AtomModal v-if="store.isLoading" classes="modal__loader">
+    <AtomLoader />
+  </AtomModal>
 </template>
 
 <script lang="ts" setup>
 import OrganismSidebar from "@/components/organisms/OrganismSidebar.vue";
+import OrganismFooter from "@/components/organisms/OrganismFooter.vue";
 import MoleculeCard from "@/components/molecules/MoleculeCard.vue";
 import { computed, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import AtomModal from "@/components/atoms/AtomModal.vue";
 import AtomLoader from "@/components/atoms/AtomLoader.vue";
-import { useContentOnPage } from "@/hooks/useContentOnPage";
 import { IFilteredProducts } from "@/models/product.interfaces";
-import OrganismFooter from "@/components/organisms/OrganismFooter.vue";
+import { useProductsStore } from "@/store/useProductsStore";
 
-const { updateContentOnPage, currentProducts, filteredProducts, isLoading } =
-  useContentOnPage();
-
+const store = useProductsStore();
 const route = useRoute();
+
 const categoryName = computed(() => route.params.category as string);
 const categoryTitle = computed(
   () =>
@@ -45,7 +47,7 @@ const categoryTitle = computed(
 );
 
 const handleFilterProducts = (filterOptions: IFilteredProducts) => {
-  filteredProducts.value = currentProducts.value.filter(
+  store.filteredProducts = store.currentProducts.filter(
     (product) =>
       product.price >= filterOptions.price[0] &&
       product.price <= filterOptions.price[1] &&
@@ -53,8 +55,8 @@ const handleFilterProducts = (filterOptions: IFilteredProducts) => {
   );
 };
 
-onMounted(() => updateContentOnPage(categoryName.value));
-watch(categoryName, () => updateContentOnPage(categoryName.value));
+onMounted(() => store.updateContentOnPage(categoryName.value));
+watch(categoryName, () => store.updateContentOnPage(categoryName.value));
 </script>
 
 <style lang="scss">
@@ -82,7 +84,7 @@ watch(categoryName, () => updateContentOnPage(categoryName.value));
   }
 }
 
-.card {
+.cards {
   display: flex;
   flex-wrap: wrap;
   gap: 64px 24px;
