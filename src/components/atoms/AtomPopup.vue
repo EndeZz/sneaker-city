@@ -1,24 +1,24 @@
 <template>
   <teleport to="body">
-    <div class="modal" :class="classes">
+    <div class="popup" :class="classes">
       <slot />
     </div>
   </teleport>
 </template>
 
 <script lang="ts" setup>
-interface IAtomModalProps {
+interface IAtomPopupProps {
   classes?: string;
+  zIndex?: number;
 }
-defineProps<IAtomModalProps>();
+withDefaults(defineProps<IAtomPopupProps>(), { zIndex: 2 });
 </script>
 
 <style lang="scss" scoped>
 @import "@/styles/variables.scss";
 @import "@/styles/mixins.scss";
 
-.modal {
-  padding: 10px;
+.popup {
   position: absolute;
   top: 0;
   left: 0;

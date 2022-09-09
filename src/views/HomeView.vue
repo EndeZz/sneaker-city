@@ -20,9 +20,9 @@
     </section>
   </main>
 
-  <AtomModal v-if="store.isLoading" classes="modal__loader">
+  <AtomPopup v-if="store.isLoading" :zIndex="4" classes="popup__loader">
     <AtomLoader />
-  </AtomModal>
+  </AtomPopup>
 </template>
 
 <script lang="ts" setup>
@@ -31,7 +31,7 @@ import OrganismFooter from "@/components/organisms/OrganismFooter.vue";
 import MoleculeCard from "@/components/molecules/MoleculeCard.vue";
 import { computed, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
-import AtomModal from "@/components/atoms/AtomModal.vue";
+import AtomPopup from "@/components/atoms/AtomPopup.vue";
 import AtomLoader from "@/components/atoms/AtomLoader.vue";
 import { IFilteredProducts } from "@/models/product.interfaces";
 import { useProductsStore } from "@/store/useProductsStore";
@@ -91,7 +91,7 @@ watch(categoryName, () => store.updateContentOnPage(categoryName.value));
   margin-top: 32px;
 }
 
-.modal__loader {
+.popup__loader {
   background-color: $color-loader-bg;
 }
 </style>
