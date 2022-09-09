@@ -69,7 +69,7 @@ import AtomPopup from "@/components/atoms/AtomPopup.vue";
 import AtomButton from "@/components/atoms/AtomButton.vue";
 import AtomAccordion from "@/components/atoms/AtomAccordion.vue";
 import { IProduct } from "@/models/product.interfaces";
-import AtomSlider from "../atoms/AtomSlider.vue";
+import AtomSlider from "@/components/atoms/AtomSlider.vue";
 
 interface IMoleculeCardProps {
   id: number;
@@ -237,74 +237,6 @@ const handleToggleAccordion = () => {
     border: 1px solid $color-gray-15;
     background-color: $color-white;
     border-radius: 8px;
-  }
-}
-
-.slider {
-  display: grid;
-
-  &__icon {
-    width: 24px;
-    height: 24px;
-  }
-
-  &__content {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    margin-top: 30px;
-    height: 550px;
-    align-items: center;
-  }
-
-  &__arrow {
-    @include font_config(400, 1.6rem, 2.2rem);
-
-    border: 0;
-    background: 0;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    text-decoration: none;
-    width: fit-content;
-    height: fit-content;
-
-    &:hover {
-      transform: scale(3);
-    }
-  }
-
-  &__img {
-    padding: 50px;
-    background-color: $color-white;
-    width: 100%;
-    height: 100%;
-    max-height: 500px;
-    max-width: 500px;
-    object-fit: contain;
-  }
-
-  &__list {
-    display: flex;
-    gap: 24px;
-    justify-content: center;
-    overflow-x: auto;
-    max-width: 816px;
-    width: 100%;
-    margin: 64px auto;
-    padding-bottom: 16px;
-  }
-
-  &__suggestion {
-    width: 96px;
-    height: 80px;
-    object-fit: contain;
-  }
-
-  &__item {
-    background-color: $color-white;
-    border-radius: 8px;
-    padding: 10px;
   }
 }
 </style>
