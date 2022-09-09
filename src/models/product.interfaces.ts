@@ -3,7 +3,7 @@ export interface IRating {
   rate: number;
 }
 
-export interface IProducts {
+export interface IProduct {
   id: number;
   title: string;
   category: string;

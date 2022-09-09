@@ -1,11 +1,11 @@
-import { IProducts } from "@/models/product.interfaces";
+import { IProduct } from "@/models/product.interfaces";
 import { fetchProductsByCategory } from "@/utils/api/apiRequests";
 import { defineStore } from "pinia";
 
 export const useProductsStore = defineStore("products", {
   state: () => ({
-    currentProducts: [] as IProducts[],
-    filteredProducts: [] as IProducts[],
+    currentProducts: [] as IProduct[],
+    filteredProducts: [] as IProduct[],
     isLoading: false,
   }),
   actions: {
