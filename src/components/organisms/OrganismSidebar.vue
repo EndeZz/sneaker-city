@@ -3,8 +3,8 @@
     <MoleculeRangeBlock title="Rating range">
       <AtomInputRange
         v-model="ratingValue"
-        :maxValue="maxRating"
-        :minValue="minRating"
+        :maxValue="RATING_CONFIG.MAX"
+        :minValue="RATING_CONFIG.MIN"
         :step="1"
         @setFilter="handleUpdateFilter"
       />
@@ -16,8 +16,8 @@
     <MoleculeRangeBlock title="Price range">
       <AtomInputRange
         v-model="priceValue"
-        :maxValue="maxPrice"
-        :minValue="minPrice"
+        :maxValue="PRICE_CONFIG.MAX"
+        :minValue="PRICE_CONFIG.MIN"
         @setFilter="handleUpdateFilter"
       />
       <div class="range__info">
@@ -31,15 +31,11 @@
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import AtomInputRange from "@/components/atoms/AtomInputRange.vue";
-import MoleculeRangeBlock from "../molecules/MoleculeRangeBlock.vue";
+import MoleculeRangeBlock from "@/components/molecules/MoleculeRangeBlock.vue";
+import { PRICE_CONFIG, RATING_CONFIG } from "@/constants/filter.constant";
 
-const minPrice = ref(0);
-const maxPrice = ref(200);
-const priceValue = ref([minPrice.value, maxPrice.value]);
-
-const minRating = ref(0);
-const maxRating = ref(5);
 const ratingValue = ref(0);
+const priceValue = ref([PRICE_CONFIG.MIN, PRICE_CONFIG.MAX]);
 
 const filterOptions = reactive({
   price: priceValue,
