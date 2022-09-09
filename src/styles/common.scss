@@ -1,0 +1,56 @@
+html {
+  scroll-behavior: smooth;
+  box-sizing: border-box;
+  font-size: 10px;
+  height: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  @include font_config(400, 1.6rem, 2.4rem);
+
+  font-family: $font-google;
+  background-color: $color-white;
+  color: $color-txt;
+}
+
+ul {
+  list-style: none;
+}
+
+a,
+button,
+input {
+  font-family: inherit;
+  margin: 0;
+  transition: 0.2s;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1312px;
+  width: 100%;
+}
+
+.hidden {
+  position: absolute;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  margin: -1px;
+  padding: 0;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+}
