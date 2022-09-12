@@ -68,6 +68,7 @@ const handleClick = (id: number) => {
 
 .slider {
   display: grid;
+  overflow: hidden;
 
   &__icon {
     width: 24px;
@@ -113,12 +114,12 @@ const handleClick = (id: number) => {
   &__list {
     display: flex;
     gap: 24px;
-    justify-content: center;
-    overflow-x: auto;
     max-width: 816px;
     width: 100%;
     margin: 64px auto;
     padding-bottom: 16px;
+    white-space: nowrap;
+    overflow-x: scroll;
   }
 
   &__suggestion {
