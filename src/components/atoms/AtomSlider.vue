@@ -27,7 +27,7 @@
     </div>
 
     <div class="slider__recommendation">
-      <h3 class="slider__caption">Рекомендации:</h3>
+      <h3 class="slider__caption">Recommendation:</h3>
       <div class="slider__box">
         <ul class="slider__list">
           <li
