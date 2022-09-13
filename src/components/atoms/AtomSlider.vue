@@ -1,7 +1,7 @@
 <template>
   <section class="slider">
     <div class="slider__content">
-      <AtomButton class="slider__arrow" @click="previousSlide">
+      <AtomButton class="slider__arrow">
         <img
           class="slider__icon"
           src="@/assets/images/icons/arrow-left.svg"
@@ -17,7 +17,7 @@
         />
       </div>
 
-      <AtomButton class="slider__arrow" @click="nextSlide">
+      <AtomButton class="slider__arrow">
         <img
           class="slider__icon"
           src="@/assets/images/icons/arrow-right.svg"
@@ -26,21 +26,26 @@
       </AtomButton>
     </div>
 
-    <ul class="slider__list">
-      <li
-        v-for="product in storeProducts.filteredProducts"
-        :key="product.id"
-        class="slider__item"
-        :class="{ slider__item_active: activeProduct?.id === product.id }"
-        @click="handleClick(product.id)"
-      >
-        <img
-          class="slider__suggestion"
-          :src="product.image"
-          :alt="product.title"
-        />
-      </li>
-    </ul>
+    <div class="slider__recommendation">
+      <h3 class="slider__caption">Рекомендации:</h3>
+      <div class="slider__box">
+        <ul class="slider__list">
+          <li
+            v-for="product in storeProducts.filteredProducts"
+            :key="product.id"
+            class="slider__item"
+            :class="{ slider__item_active: activeProduct?.id === product.id }"
+            @click="handleClick(product.id)"
+          >
+            <img
+              class="slider__suggestion"
+              :src="product.image"
+              :alt="product.title"
+            />
+          </li>
+        </ul>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -57,31 +62,9 @@ interface IAtomSliderProps {
 const storeProducts = useProductsStore();
 const props = defineProps<IAtomSliderProps>();
 const { activeProduct } = toRefs(props);
-const currentSlide = ref<number>(1);
-const emit = defineEmits(["clickOnSlider", "changeSlide"]);
+const emit = defineEmits(["clickOnSlider"]);
 
 const handleClick = (id: number) => emit("clickOnSlider", id);
-
-const updateSliderMovementDirection = (value: number) =>
-  value === 0 ? (value = 1) : emit("changeSlide", value);
-
-const nextSlide = () => {
-  if (!activeProduct.value) return;
-  // Todo: Переделать костыль с длиной
-  currentSlide.value =
-    (activeProduct.value.id + 1) % (storeProducts.filteredProducts.length + 1);
-
-  updateSliderMovementDirection(currentSlide.value);
-};
-
-const previousSlide = () => {
-  if (!activeProduct.value) return;
-  // Todo: Переделать костыль с длиной
-  currentSlide.value =
-    (activeProduct.value.id - 1) % (storeProducts.filteredProducts.length + 1);
-
-  updateSliderMovementDirection(currentSlide.value);
-};
 </script>
 
 <style lang="scss" scoped>
@@ -89,7 +72,6 @@ const previousSlide = () => {
 @import "@/styles/mixins.scss";
 
 .slider {
-  display: grid;
   overflow: hidden;
 
   &__icon {
@@ -107,16 +89,9 @@ const previousSlide = () => {
   }
 
   &__arrow {
-    @include font_config(400, 1.6rem, 2.2rem);
-
     border: 0;
     background: 0;
     cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    text-decoration: none;
-    width: fit-content;
-    height: fit-content;
 
     &:hover {
       transform: scale(3);
@@ -137,12 +112,29 @@ const previousSlide = () => {
     object-fit: contain;
   }
 
+  &__box {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__caption {
+    @include font_config(400, 2.2rem, 2.2rem);
+  }
+
+  &__recommendation {
+    display: flex;
+    flex-direction: column;
+
+    gap: 24px;
+    margin-top: 64px;
+  }
+
   &__list {
     display: flex;
     gap: 24px;
     max-width: 816px;
-    width: 100%;
-    margin: 64px auto;
+    // width: 100%;
+    // margin: 64px auto;
     padding-bottom: 16px;
     white-space: nowrap;
     overflow-x: auto;
@@ -156,18 +148,18 @@ const previousSlide = () => {
 
   &__item {
     background-color: $color-white;
-    border: 1px solid transparent;
+    border: 4px solid $color-white;
     border-radius: 8px;
     padding: 10px;
     transition: all 0.2s ease-in-out;
     cursor: pointer;
 
     &_active {
-      border: 1px solid $color-red-1;
+      box-shadow: inset 0px 0px 20px $color-gray-10, 0px 2px 4px $color-shadow;
     }
 
     &:hover {
-      border: 1px solid $color-gray-15;
+      border-color: $color-gray-15;
     }
   }
 }

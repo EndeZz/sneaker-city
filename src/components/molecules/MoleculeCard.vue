@@ -26,7 +26,6 @@
         <AtomSlider
           :activeProduct="activeProduct"
           @clickOnSlider="handleClickOnSlider"
-          @changeSlide="handleUpdateActiveProduct"
         />
       </section>
 
@@ -85,7 +84,7 @@ const props = defineProps<IMoleculeCardProps>();
 const { id } = toRefs(props);
 const isShow = ref<boolean>(false);
 const isDescActive = ref<boolean>(true);
-const activeProduct = ref<IProduct | undefined>();
+const activeProduct = ref<IProduct>();
 const productStore = useProductsStore();
 const favoriteStore = useFavoriteStore();
 
@@ -101,13 +100,6 @@ const handleClickOnSlider = async (id: number) => {
 
 const handleToggleAccordion = () => {
   isDescActive.value = !isDescActive.value;
-};
-
-const handleUpdateActiveProduct = async (activeId: number) => {
-  const nextProduct = productStore.filteredProducts.find(
-    (product) => product.id === activeId
-  );
-  activeProduct.value = nextProduct && (await fetchProduct(nextProduct?.id));
 };
 
 const currentFavoriteValues = computed(() =>
@@ -161,19 +153,23 @@ const handleAddToFavorite = () => {
   }
 
   &__favorite {
-    @include font_config(400, 1.6rem, 2.2rem);
-
     border: 0;
     background: 0;
     cursor: pointer;
+    border-radius: 50%;
     display: inline-flex;
     align-items: center;
     text-decoration: none;
-    width: fit-content;
-    height: fit-content;
+    padding: 8px;
 
     &:hover {
       transform: scale(1.2);
+      background-color: $color-gray-04;
+    }
+
+    &:active {
+      transform: scale(1.1);
+      background-color: $color-gray-15;
     }
   }
 
@@ -235,19 +231,14 @@ const handleAddToFavorite = () => {
   }
 
   &__change_icon {
-    @include font_config(700, 1.6rem, 2.4rem);
-
-    border: 1px solid transparent;
     border: 0;
     border-radius: 50%;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     text-decoration: none;
-    width: fit-content;
 
     padding: 8px;
-    color: $color-txt;
     background-color: $color-white;
 
     &:hover {
