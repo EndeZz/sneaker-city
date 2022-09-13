@@ -65,7 +65,7 @@
 
 <script lang="ts" setup>
 import { fetchProduct } from "@/utils/api/apiRequests";
-import { computed, onMounted, ref, toRefs, watch } from "vue";
+import { computed, ref, toRefs } from "vue";
 import AtomPopup from "@/components/atoms/AtomPopup.vue";
 import AtomButton from "@/components/atoms/AtomButton.vue";
 import AtomAccordion from "@/components/atoms/AtomAccordion.vue";
