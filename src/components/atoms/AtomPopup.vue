@@ -20,6 +20,7 @@ const emit = defineEmits(["update:isShow"]);
 
 const handleClosePopup = () => {
   emit("update:isShow", false);
+  document.body.style.overflowY = "visible";
 };
 </script>
 
