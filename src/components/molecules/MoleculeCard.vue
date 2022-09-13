@@ -135,6 +135,8 @@ const handleClickMinus = () => {
 @import "@/styles/mixins.scss";
 
 .details {
+  overflow-y: auto;
+  padding: 20px;
   background-color: $color-gray-65;
 
   &__wrapper {
@@ -147,7 +149,6 @@ const handleClickMinus = () => {
     min-width: 820px;
     padding: 96px 64px 124px;
     background-color: $color-bg;
-    overflow: auto;
   }
 
   &__header {
