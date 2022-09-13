@@ -19,12 +19,14 @@
 import AtomLink from "@/components/atoms/AtomLink.vue";
 import { routePath } from "@/router/route-path";
 import { useFavoriteStore } from "@/store";
+import { computed } from "vue";
 
 const favoriteStore = useFavoriteStore();
-const favoriteLength =
+const favoriteLength = computed(() =>
   favoriteStore.favoriteProducts.length > 9
     ? "..9"
-    : favoriteStore.favoriteProducts.length;
+    : favoriteStore.favoriteProducts.length
+);
 </script>
 
 <style lang="scss" scoped>
