@@ -39,15 +39,15 @@
 
         <div class="details__block">
           <div class="details__change-block">
-            <AtomButton class="details__change_icon">
+            <AtomButton class="details__change_icon" @click="handleClickMinus">
               <img
                 class="slider__icon"
                 src="@/assets/images/icons/fi_minus.svg"
                 alt="Minus icon"
               />
             </AtomButton>
-            <p class="details__count">1</p>
-            <AtomButton class="details__change_icon">
+            <p class="details__count">{{ count }}</p>
+            <AtomButton class="details__change_icon" @click="handleClickPlus">
               <img
                 class="slider__icon"
                 src="@/assets/images/icons/fi_plus.svg"
@@ -71,7 +71,7 @@ import AtomAccordion from "@/components/atoms/AtomAccordion.vue";
 import { IProduct } from "@/models/product.interfaces";
 import AtomSlider from "@/components/atoms/AtomSlider.vue";
 import AtomIconFavorite from "@/components/atoms/AtomIconFavorite.vue";
-import { useFavoriteStore, useProductsStore } from "@/store";
+import { useFavoriteStore } from "@/store";
 
 interface IMoleculeCardProps {
   id: number;
@@ -85,7 +85,6 @@ const { id } = toRefs(props);
 const isShow = ref<boolean>(false);
 const isDescActive = ref<boolean>(true);
 const activeProduct = ref<IProduct>();
-const productStore = useProductsStore();
 const favoriteStore = useFavoriteStore();
 
 const handleClickOnProduct = async () => {
@@ -116,6 +115,18 @@ const handleAddToFavorite = () => {
   } else {
     favoriteStore.addToFavorite(activeProduct.value);
   }
+};
+
+//// Заготовка для реализации фичи добавления в корзину и самой корзины
+const count = ref(0);
+
+const handleClickPlus = () => {
+  count.value++;
+};
+
+const handleClickMinus = () => {
+  if (count.value <= 0) return;
+  count.value--;
 };
 </script>
 
@@ -252,7 +263,11 @@ const handleAddToFavorite = () => {
   }
 
   &__count {
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 48px;
+    height: 48px;
     padding: 12px 20px;
     border: 1px solid $color-gray-15;
     background-color: $color-white;
