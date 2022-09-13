@@ -75,6 +75,7 @@ watch(categoryName, () => store.updateContentOnPage(categoryName.value));
 }
 
 .content {
+  width: 100%;
   padding-top: 32px;
   padding-left: 64px;
 
