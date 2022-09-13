@@ -52,7 +52,7 @@
 <script lang="ts" setup>
 import { IProduct } from "@/models/product.interfaces";
 import { useProductsStore } from "@/store";
-import { toRefs, ref } from "vue";
+import { toRefs } from "vue";
 import AtomButton from "./AtomButton.vue";
 
 interface IAtomSliderProps {
@@ -133,8 +133,6 @@ const handleClick = (id: number) => emit("clickOnSlider", id);
     display: flex;
     gap: 24px;
     max-width: 816px;
-    // width: 100%;
-    // margin: 64px auto;
     padding-bottom: 16px;
     white-space: nowrap;
     overflow-x: auto;
