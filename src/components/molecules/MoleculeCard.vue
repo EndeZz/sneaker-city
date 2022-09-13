@@ -144,6 +144,7 @@ const handleClickMinus = () => {
 
   &__content {
     width: 100%;
+    min-width: 820px;
     padding: 96px 64px 124px;
     background-color: $color-bg;
     overflow: auto;
@@ -202,8 +203,9 @@ const handleClickMinus = () => {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 496px;
-    min-width: 496px;
+    max-width: 496px;
+    width: 100%;
+    min-width: 400px;
     padding: 32px 64px 131px;
     background-color: $color-white;
   }
