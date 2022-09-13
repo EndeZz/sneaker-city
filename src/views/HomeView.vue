@@ -25,7 +25,7 @@
     </section>
   </main>
 
-  <AtomPopup v-if="store.isLoading" :zIndex="4" classes="popup__loader">
+  <AtomPopup :isShow="store.isLoading" bg="popup__loader">
     <AtomLoader />
   </AtomPopup>
 </template>

@@ -1,17 +1,26 @@
 <template>
   <teleport to="body">
-    <div class="popup" :class="classes">
-      <slot />
+    <div v-if="isShow" @click="handleClosePopup" class="popup" :class="bg">
+      <div @click.stop class="popup__content" :class="classes">
+        <slot />
+      </div>
     </div>
   </teleport>
 </template>
 
 <script lang="ts" setup>
 interface IAtomPopupProps {
+  bg?: string;
   classes?: string;
-  zIndex?: number;
+  isShow: boolean;
 }
-withDefaults(defineProps<IAtomPopupProps>(), { zIndex: 2 });
+withDefaults(defineProps<IAtomPopupProps>(), { isShow: false });
+
+const emit = defineEmits(["update:isShow"]);
+
+const handleClosePopup = () => {
+  emit("update:isShow", false);
+};
 </script>
 
 <style lang="scss" scoped>
@@ -22,8 +31,13 @@ withDefaults(defineProps<IAtomPopupProps>(), { zIndex: 2 });
   position: absolute;
   top: 0;
   left: 0;
-  height: 100%;
-  width: 100%;
+  right: 0;
+  bottom: 0;
+  display: flex;
   z-index: 5;
+
+  &__content {
+    margin: auto;
+  }
 }
 </style>

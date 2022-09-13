@@ -11,7 +11,7 @@
       </figcaption>
     </figure>
 
-    <AtomPopup v-if="isShow" classes="details">
+    <AtomPopup v-model:isShow="isShow" classes="details__wrapper" bg="details">
       <section class="details__content">
         <header class="details__header">
           <div class="details__info">
@@ -135,10 +135,12 @@ const handleClickMinus = () => {
 @import "@/styles/mixins.scss";
 
 .details {
-  background-color: $color-bg;
-  display: flex;
-  justify-content: space-between;
-  height: 100%;
+  background-color: $color-gray-65;
+
+  &__wrapper {
+    display: flex;
+    justify-content: space-between;
+  }
 
   &__content {
     width: 100%;
