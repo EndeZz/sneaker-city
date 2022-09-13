@@ -5,7 +5,12 @@
     <section class="content">
       <h2 class="content__title">{{ categoryTitle ?? "The new arrivals" }}</h2>
 
-      <ul v-if="!store.isLoading" class="cards">
+      <TransitionGroup
+        tag="ul"
+        v-if="!store.isLoading"
+        name="cards"
+        class="cards"
+      >
         <MoleculeCard
           v-for="product in store.filteredProducts"
           :key="product.id"
@@ -14,7 +19,7 @@
           :price="product.price"
           :image="product.image"
         />
-      </ul>
+      </TransitionGroup>
 
       <OrganismFooter />
     </section>
@@ -89,6 +94,18 @@ watch(categoryName, () => store.updateContentOnPage(categoryName.value));
   flex-wrap: wrap;
   gap: 64px 24px;
   margin-top: 32px;
+
+  &-move,
+  &-enter-active,
+  &-leave-active {
+    transition: all 0.3s ease;
+  }
+
+  &-enter-from,
+  &-leave-to {
+    opacity: 0;
+    transform: translateY(-60px);
+  }
 }
 
 .popup__loader {
