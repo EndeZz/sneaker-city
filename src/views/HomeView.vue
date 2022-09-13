@@ -1,5 +1,5 @@
 <template>
-  <main class="main content__container">
+  <main class="main">
     <OrganismSidebar @setFilter="handleFilterProducts" />
 
     <section class="content">
@@ -77,12 +77,6 @@ watch(categoryName, () => store.updateContentOnPage(categoryName.value));
 .content {
   padding-top: 32px;
   padding-left: 64px;
-
-  &__container {
-    margin: 0 auto;
-    max-width: 1344px;
-    width: 100%;
-  }
 
   &__title {
     @include font_config(700, 2.4rem, 3.2rem);
