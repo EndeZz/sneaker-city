@@ -10,66 +10,69 @@
         <p class="card__caption">{{ price }}$</p>
       </figcaption>
     </figure>
+
+    <AtomPopup v-if="isShow" classes="details">
+      <section class="details__content">
+        <header class="details__header">
+          <div class="details__info">
+            <h2 class="details__title">{{ activeProduct?.title }}</h2>
+            <p class="details__price">{{ activeProduct?.price }}$</p>
+          </div>
+          <AtomButton class="details__favorite" @click="handleAddToFavorite">
+            <AtomIconFavorite :isFavorite="!!currentFavoriteValues" />
+          </AtomButton>
+        </header>
+
+        <AtomSlider
+          :activeProduct="activeProduct"
+          @clickOnSlider="handleClickOnSlider"
+          @changeSlide="handleUpdateActiveProduct"
+        />
+      </section>
+
+      <aside class="details__sidebar">
+        <AtomAccordion
+          title="Description"
+          :description="activeProduct && activeProduct.description"
+          :isActive="isDescActive"
+          @toggleAccordion="handleToggleAccordion"
+        />
+
+        <div class="details__block">
+          <div class="details__change-block">
+            <AtomButton class="details__change_icon">
+              <img
+                class="slider__icon"
+                src="@/assets/images/icons/fi_minus.svg"
+                alt="Minus icon"
+              />
+            </AtomButton>
+            <p class="details__count">1</p>
+            <AtomButton class="details__change_icon">
+              <img
+                class="slider__icon"
+                src="@/assets/images/icons/fi_plus.svg"
+                alt="Plus icon"
+              />
+            </AtomButton>
+          </div>
+          <AtomButton class="details__cart-btn">Add to cart</AtomButton>
+        </div>
+      </aside>
+    </AtomPopup>
   </li>
-
-  <AtomPopup v-if="isShow" classes="details">
-    <div class="details__content">
-      <header class="details__header">
-        <div class="details__info">
-          <h2 class="details__title">{{ activeProduct?.title }}</h2>
-          <p class="details__price">{{ activeProduct?.price }}$</p>
-        </div>
-        <AtomButton class="details__favorite">
-          <img src="@/assets/images/icons/fi_heart.svg" alt="Favorite icon" />
-        </AtomButton>
-      </header>
-
-      <AtomSlider
-        :activeProduct="activeProduct"
-        @clickOnSlider="handleClickOnSlider"
-      />
-    </div>
-
-    <aside class="details__sidebar">
-      <AtomAccordion
-        title="Description"
-        :description="activeProduct && activeProduct.description"
-        :isActive="isDescActive"
-        @toggleAccordion="handleToggleAccordion"
-      />
-
-      <div class="details__block">
-        <div class="details__change-block">
-          <AtomButton class="details__change_icon">
-            <img
-              class="slider__icon"
-              src="@/assets/images/icons/fi_minus.svg"
-              alt="Minus icon"
-            />
-          </AtomButton>
-          <p class="details__count">1</p>
-          <AtomButton class="details__change_icon">
-            <img
-              class="slider__icon"
-              src="@/assets/images/icons/fi_plus.svg"
-              alt="Plus icon"
-            />
-          </AtomButton>
-        </div>
-        <AtomButton class="details__cart-btn">Add to cart</AtomButton>
-      </div>
-    </aside>
-  </AtomPopup>
 </template>
 
 <script lang="ts" setup>
 import { fetchProduct } from "@/utils/api/apiRequests";
-import { ref, toRefs } from "vue";
+import { computed, onMounted, ref, toRefs, watch } from "vue";
 import AtomPopup from "@/components/atoms/AtomPopup.vue";
 import AtomButton from "@/components/atoms/AtomButton.vue";
 import AtomAccordion from "@/components/atoms/AtomAccordion.vue";
 import { IProduct } from "@/models/product.interfaces";
 import AtomSlider from "@/components/atoms/AtomSlider.vue";
+import AtomIconFavorite from "@/components/atoms/AtomIconFavorite.vue";
+import { useFavoriteStore, useProductsStore } from "@/store";
 
 interface IMoleculeCardProps {
   id: number;
@@ -81,8 +84,10 @@ interface IMoleculeCardProps {
 const props = defineProps<IMoleculeCardProps>();
 const { id } = toRefs(props);
 const isShow = ref<boolean>(false);
-const isDescActive = ref<boolean>(false);
-const activeProduct = ref<IProduct | null>(null);
+const isDescActive = ref<boolean>(true);
+const activeProduct = ref<IProduct | undefined>();
+const productStore = useProductsStore();
+const favoriteStore = useFavoriteStore();
 
 const handleClickOnProduct = async () => {
   document.body.style.overflowY = "hidden";
@@ -96,6 +101,29 @@ const handleClickOnSlider = async (id: number) => {
 
 const handleToggleAccordion = () => {
   isDescActive.value = !isDescActive.value;
+};
+
+const handleUpdateActiveProduct = async (activeId: number) => {
+  const nextProduct = productStore.filteredProducts.find(
+    (product) => product.id === activeId
+  );
+  activeProduct.value = nextProduct && (await fetchProduct(nextProduct?.id));
+};
+
+const currentFavoriteValues = computed(() =>
+  favoriteStore.favoriteProducts.find(
+    (product) => product.title === activeProduct?.value?.title
+  )
+);
+
+const handleAddToFavorite = () => {
+  if (!activeProduct.value) return;
+
+  if (currentFavoriteValues.value) {
+    favoriteStore.removeFromFavorite(activeProduct.value);
+  } else {
+    favoriteStore.addToFavorite(activeProduct.value);
+  }
 };
 </script>
 
@@ -113,6 +141,7 @@ const handleToggleAccordion = () => {
     width: 100%;
     padding: 96px 64px 124px;
     background-color: $color-bg;
+    overflow: auto;
   }
 
   &__header {

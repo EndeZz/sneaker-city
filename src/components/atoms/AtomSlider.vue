@@ -1,7 +1,7 @@
 <template>
   <section class="slider">
     <div class="slider__content">
-      <AtomButton class="slider__arrow">
+      <AtomButton class="slider__arrow" @click="previousSlide">
         <img
           class="slider__icon"
           src="@/assets/images/icons/arrow-left.svg"
@@ -17,7 +17,7 @@
         />
       </div>
 
-      <AtomButton class="slider__arrow">
+      <AtomButton class="slider__arrow" @click="nextSlide">
         <img
           class="slider__icon"
           src="@/assets/images/icons/arrow-right.svg"
@@ -25,11 +25,13 @@
         />
       </AtomButton>
     </div>
+
     <ul class="slider__list">
       <li
-        v-for="product in store.filteredProducts"
+        v-for="product in storeProducts.filteredProducts"
         :key="product.id"
         class="slider__item"
+        :class="{ slider__item_active: activeProduct?.id === product.id }"
         @click="handleClick(product.id)"
       >
         <img
@@ -44,21 +46,41 @@
 
 <script lang="ts" setup>
 import { IProduct } from "@/models/product.interfaces";
-import { useProductsStore } from "@/store/useProductsStore";
+import { useProductsStore } from "@/store";
+import { toRefs, ref } from "vue";
 import AtomButton from "./AtomButton.vue";
 
-const store = useProductsStore();
-
 interface IAtomSliderProps {
-  activeProduct: IProduct | null;
+  activeProduct: IProduct | undefined;
 }
 
-defineProps<IAtomSliderProps>();
+const storeProducts = useProductsStore();
+const props = defineProps<IAtomSliderProps>();
+const { activeProduct } = toRefs(props);
+const currentSlide = ref<number>(1);
+const emit = defineEmits(["clickOnSlider", "changeSlide"]);
 
-const emit = defineEmits(["clickOnSlider"]);
+const handleClick = (id: number) => emit("clickOnSlider", id);
 
-const handleClick = (id: number) => {
-  emit("clickOnSlider", id);
+const updateSliderMovementDirection = (value: number) =>
+  value === 0 ? (value = 1) : emit("changeSlide", value);
+
+const nextSlide = () => {
+  if (!activeProduct.value) return;
+  // Todo: Переделать костыль с длиной
+  currentSlide.value =
+    (activeProduct.value.id + 1) % (storeProducts.filteredProducts.length + 1);
+
+  updateSliderMovementDirection(currentSlide.value);
+};
+
+const previousSlide = () => {
+  if (!activeProduct.value) return;
+  // Todo: Переделать костыль с длиной
+  currentSlide.value =
+    (activeProduct.value.id - 1) % (storeProducts.filteredProducts.length + 1);
+
+  updateSliderMovementDirection(currentSlide.value);
 };
 </script>
 
@@ -99,6 +121,10 @@ const handleClick = (id: number) => {
     &:hover {
       transform: scale(3);
     }
+
+    &:active {
+      transform: scale(2.2);
+    }
   }
 
   &__img {
@@ -119,7 +145,7 @@ const handleClick = (id: number) => {
     margin: 64px auto;
     padding-bottom: 16px;
     white-space: nowrap;
-    overflow-x: scroll;
+    overflow-x: auto;
   }
 
   &__suggestion {
@@ -130,8 +156,19 @@ const handleClick = (id: number) => {
 
   &__item {
     background-color: $color-white;
+    border: 1px solid transparent;
     border-radius: 8px;
     padding: 10px;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+
+    &_active {
+      border: 1px solid $color-red-1;
+    }
+
+    &:hover {
+      border: 1px solid $color-gray-15;
+    }
   }
 }
 </style>
