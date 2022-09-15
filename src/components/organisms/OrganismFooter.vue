@@ -80,6 +80,10 @@
     gap: 8px;
   }
 
+  &__copyright {
+    margin-right: 30px;
+  }
+
   &__info {
     display: flex;
     align-items: center;

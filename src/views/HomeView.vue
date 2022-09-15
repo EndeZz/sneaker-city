@@ -1,28 +1,33 @@
 <template>
-  <main class="main content__container">
+  <main class="main">
     <OrganismSidebar @setFilter="handleFilterProducts" />
 
     <section class="content">
       <h2 class="content__title">{{ categoryTitle ?? "The new arrivals" }}</h2>
 
-      <ul v-if="!store.isLoading" class="cards">
+      <TransitionGroup
+        tag="ul"
+        v-if="!store.isLoading"
+        name="cards"
+        class="cards"
+      >
         <MoleculeCard
-          v-for="product in store.filteredProducts"
+          v-for="product in store.currentProducts"
           :key="product.id"
           :id="product.id"
           :title="product.title"
           :price="product.price"
           :image="product.image"
         />
-      </ul>
+      </TransitionGroup>
 
       <OrganismFooter />
     </section>
   </main>
 
-  <AtomModal v-if="store.isLoading" classes="modal__loader">
+  <AtomPopup :isShow="store.isLoading" bg="popup__loader">
     <AtomLoader />
-  </AtomModal>
+  </AtomPopup>
 </template>
 
 <script lang="ts" setup>
@@ -31,7 +36,7 @@ import OrganismFooter from "@/components/organisms/OrganismFooter.vue";
 import MoleculeCard from "@/components/molecules/MoleculeCard.vue";
 import { computed, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
-import AtomModal from "@/components/atoms/AtomModal.vue";
+import AtomPopup from "@/components/atoms/AtomPopup.vue";
 import AtomLoader from "@/components/atoms/AtomLoader.vue";
 import { IFilteredProducts } from "@/models/product.interfaces";
 import { useProductsStore } from "@/store/useProductsStore";
@@ -47,7 +52,7 @@ const categoryTitle = computed(
 );
 
 const handleFilterProducts = (filterOptions: IFilteredProducts) => {
-  store.filteredProducts = store.currentProducts.filter(
+  store.currentProducts = store.currentProducts.filter(
     (product) =>
       product.price >= filterOptions.price[0] &&
       product.price <= filterOptions.price[1] &&
@@ -70,14 +75,9 @@ watch(categoryName, () => store.updateContentOnPage(categoryName.value));
 }
 
 .content {
+  width: 100%;
   padding-top: 32px;
   padding-left: 64px;
-
-  &__container {
-    margin: 0 auto;
-    max-width: 1344px;
-    width: 100%;
-  }
 
   &__title {
     @include font_config(700, 2.4rem, 3.2rem);
@@ -89,9 +89,21 @@ watch(categoryName, () => store.updateContentOnPage(categoryName.value));
   flex-wrap: wrap;
   gap: 64px 24px;
   margin-top: 32px;
+
+  &-move,
+  &-enter-active,
+  &-leave-active {
+    transition: all 0.3s ease;
+  }
+
+  &-enter-from,
+  &-leave-to {
+    opacity: 0;
+    transform: translateY(-60px);
+  }
 }
 
-.modal__loader {
+.popup__loader {
   background-color: $color-loader-bg;
 }
 </style>

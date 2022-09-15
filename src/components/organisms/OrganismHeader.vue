@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <nav class="navbar header__container">
+    <nav class="navbar">
       <MoleculeNavLogo />
 
       <MoleculeNavRoutes />
@@ -23,19 +23,12 @@ import MoleculeNavLogo from "@/components/molecules/MoleculeNavLogo.vue";
 .header {
   width: 100%;
   border-bottom: 1px solid $color-gray-15;
-
-  &__container {
-    margin: 0 auto;
-    max-width: 1312px;
-    width: 100%;
-  }
 }
 
 .navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  padding: 26px 0 18px;
+  padding: 26px 32px 18px;
 }
 </style>
