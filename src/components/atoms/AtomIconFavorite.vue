@@ -22,5 +22,5 @@ interface IAtomIconFavoriteProps {
   isFavorite: boolean;
 }
 
-defineProps<IAtomIconFavoriteProps>();
+withDefaults(defineProps<IAtomIconFavoriteProps>(), { isFavorite: false });
 </script>

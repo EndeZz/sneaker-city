@@ -12,7 +12,7 @@
         class="cards"
       >
         <MoleculeCard
-          v-for="product in store.filteredProducts"
+          v-for="product in store.currentProducts"
           :key="product.id"
           :id="product.id"
           :title="product.title"
@@ -52,7 +52,7 @@ const categoryTitle = computed(
 );
 
 const handleFilterProducts = (filterOptions: IFilteredProducts) => {
-  store.filteredProducts = store.currentProducts.filter(
+  store.currentProducts = store.currentProducts.filter(
     (product) =>
       product.price >= filterOptions.price[0] &&
       product.price <= filterOptions.price[1] &&

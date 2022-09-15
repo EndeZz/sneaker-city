@@ -19,7 +19,7 @@
             <p class="details__price">{{ activeProduct?.price }}$</p>
           </div>
           <AtomButton class="details__favorite" @click="handleAddToFavorite">
-            <AtomIconFavorite :isFavorite="!!currentFavoriteValues" />
+            <AtomIconFavorite :isFavorite="activeProduct?.isLiked" />
           </AtomButton>
         </header>
 
@@ -38,23 +38,7 @@
         />
 
         <div class="details__block">
-          <div class="details__change-block">
-            <AtomButton class="details__change_icon" @click="handleClickMinus">
-              <img
-                class="slider__icon"
-                src="@/assets/images/icons/fi_minus.svg"
-                alt="Minus icon"
-              />
-            </AtomButton>
-            <p class="details__count">{{ count }}</p>
-            <AtomButton class="details__change_icon" @click="handleClickPlus">
-              <img
-                class="slider__icon"
-                src="@/assets/images/icons/fi_plus.svg"
-                alt="Plus icon"
-              />
-            </AtomButton>
-          </div>
+          <MoleculeChangeCount />
           <AtomButton class="details__cart-btn">Add to cart</AtomButton>
         </div>
       </aside>
@@ -71,7 +55,9 @@ import AtomAccordion from "@/components/atoms/AtomAccordion.vue";
 import { IProduct } from "@/models/product.interfaces";
 import AtomSlider from "@/components/atoms/AtomSlider.vue";
 import AtomIconFavorite from "@/components/atoms/AtomIconFavorite.vue";
-import { useFavoriteStore } from "@/store";
+import MoleculeChangeCount from "@/components/molecules/MoleculeChangeCount.vue";
+import { useProductsStore } from "@/store";
+import { setNewProduct } from "@/utils";
 
 interface IMoleculeCardProps {
   id: number;
@@ -85,48 +71,40 @@ const { id } = toRefs(props);
 const isShow = ref<boolean>(false);
 const isDescActive = ref<boolean>(true);
 const activeProduct = ref<IProduct>();
-const favoriteStore = useFavoriteStore();
+const store = useProductsStore();
 
 const handleClickOnProduct = async () => {
   document.body.style.overflowY = "hidden";
   isShow.value = true;
   activeProduct.value = await fetchProduct(id.value);
+  setNewProduct(activeProduct.value);
 };
 
 const handleClickOnSlider = async (id: number) => {
   activeProduct.value = await fetchProduct(id);
+  setNewProduct(activeProduct.value);
 };
 
 const handleToggleAccordion = () => {
   isDescActive.value = !isDescActive.value;
 };
 
-const currentFavoriteValues = computed(() =>
-  favoriteStore.favoriteProducts.find(
-    (product) => product.title === activeProduct?.value?.title
+const currentFavoriteValue = computed(() =>
+  store.favoriteProducts.find(
+    (productId) => productId === activeProduct?.value?.id
   )
 );
 
 const handleAddToFavorite = () => {
   if (!activeProduct.value) return;
 
-  if (currentFavoriteValues.value) {
-    favoriteStore.removeFromFavorite(activeProduct.value);
+  if (currentFavoriteValue.value) {
+    store.removeFromFavorite(activeProduct.value.id);
+    activeProduct.value.isLiked = false;
   } else {
-    favoriteStore.addToFavorite(activeProduct.value);
+    store.addToFavorite(activeProduct.value.id);
+    activeProduct.value.isLiked = true;
   }
-};
-
-//// Заготовка для реализации фичи добавления в корзину и самой корзины
-const count = ref(0);
-
-const handleClickPlus = () => {
-  count.value++;
-};
-
-const handleClickMinus = () => {
-  if (count.value <= 0) return;
-  count.value--;
 };
 </script>
 
@@ -237,46 +215,6 @@ const handleClickMinus = () => {
 
   &__block {
     display: flex;
-  }
-
-  &__change-block {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-right: 28px;
-  }
-
-  &__change_icon {
-    border: 0;
-    border-radius: 50%;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    text-decoration: none;
-
-    padding: 8px;
-    background-color: $color-white;
-
-    &:hover {
-      background-color: $color-gray-04;
-      transform: scale(1.2);
-    }
-
-    &:active {
-      background-color: $color-gray-15;
-    }
-  }
-
-  &__count {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    max-width: 48px;
-    height: 48px;
-    padding: 12px 20px;
-    border: 1px solid $color-gray-15;
-    background-color: $color-white;
-    border-radius: 8px;
   }
 }
 </style>

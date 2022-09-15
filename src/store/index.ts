@@ -1,2 +1,1 @@
-export * from './useFavoriteStore'
-export * from './useProductsStore'
+export * from "./useProductsStore";

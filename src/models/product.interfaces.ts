@@ -11,6 +11,7 @@ export interface IProduct {
   image: string;
   price: number;
   rating: IRating;
+  isLiked: boolean;
 }
 
 export interface IFilteredProducts {

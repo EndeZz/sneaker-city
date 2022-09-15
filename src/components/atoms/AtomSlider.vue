@@ -31,7 +31,7 @@
       <div class="slider__box">
         <ul class="slider__list">
           <li
-            v-for="product in storeProducts.filteredProducts"
+            v-for="product in store.currentProducts"
             :key="product.id"
             class="slider__item"
             :class="{ slider__item_active: activeProduct?.id === product.id }"
@@ -59,7 +59,7 @@ interface IAtomSliderProps {
   activeProduct: IProduct | undefined;
 }
 
-const storeProducts = useProductsStore();
+const store = useProductsStore();
 const props = defineProps<IAtomSliderProps>();
 const { activeProduct } = toRefs(props);
 const emit = defineEmits(["clickOnSlider"]);
