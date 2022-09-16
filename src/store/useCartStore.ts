@@ -25,20 +25,19 @@ export const useCartStore = defineStore("cart", {
 
       setLocalStorage<ICart[]>("cart", this.cart);
     },
-    removeFromCart(id: number) {
-      this.cart = this.cart.filter(({ product }) => product.id !== id);
-      setLocalStorage<ICart[]>("cart", this.cart);
-    },
     updateAmount(id: number, value: number) {
-      const currentIndex = this.cart.findIndex(
-        ({ product }) => product.id === id
-      );
-      this.cart[currentIndex].count = value;
+      this.cart = this.cart
+        .map(({ product, ...cartProduct }) => {
+          if (product.id === id) {
+            cartProduct.count = value;
+          }
+          if (cartProduct.count === 0) {
+            return null;
+          }
 
-      if (this.cart[currentIndex].count === 0)
-        this.removeFromCart(this.cart[currentIndex].product.id);
-
-      setLocalStorage<ICart[]>("cart", this.cart);
+          return { ...cartProduct, product };
+        })
+        .filter((item) => item !== null) as ICart[];
     },
     clearCart() {
       this.cart = [] as ICart[];
