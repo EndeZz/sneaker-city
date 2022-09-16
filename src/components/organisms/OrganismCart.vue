@@ -1,13 +1,13 @@
 <template>
   <section class="cart">
     <h2 class="cart__title">Your shopping cart</h2>
-    <ul class="cart__list">
+    <TransitionGroup tag="ul" name="cart__list" class="cart__list">
       <MoleculeCartItem
         v-for="item in cart"
         :key="item.product.id"
         :item="item"
       />
-    </ul>
+    </TransitionGroup>
   </section>
 </template>
 
@@ -41,6 +41,23 @@ const { cart } = storeToRefs(cartStore);
     flex-direction: column;
     gap: 24px;
     overflow: hidden;
+
+    &-move,
+    &-enter-active,
+    &-leave-active {
+      transition: all 0.3s ease;
+    }
+
+    &-enter-from,
+    &-leave-to {
+      opacity: 0;
+      transform: translateY(30px);
+      transform: translateX(30px);
+    }
+
+    &-leave-active {
+      position: absolute;
+    }
   }
 }
 </style>

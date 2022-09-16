@@ -66,7 +66,8 @@
 .footer {
   @include font_config(400, 1.6rem, 2.4rem);
 
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 212px;
   justify-content: space-between;
   align-items: center;
   margin-top: 92px;
@@ -76,8 +77,8 @@
 
   &__contact {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    flex-wrap: wrap;
+    gap: 8px 100px;
   }
 
   &__copyright {
