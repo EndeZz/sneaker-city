@@ -64,7 +64,7 @@ onMounted(() => store.updateContentOnPage(categoryName.value));
 watch(categoryName, () => store.updateContentOnPage(categoryName.value));
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@/styles/variables.scss";
 @import "@/styles/mixins.scss";
 

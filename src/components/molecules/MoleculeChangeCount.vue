@@ -1,14 +1,14 @@
 <template>
   <div class="change__block">
-    <AtomButton class="change__btn" @click="handleClickMinus">
+    <AtomButton class="change__btn" @click="handleClickDecrement">
       <img
         class="slider__icon"
         src="@/assets/images/icons/fi_minus.svg"
         alt="Minus icon"
       />
     </AtomButton>
-    <p class="change__count">{{ count }}</p>
-    <AtomButton class="change__btn" @click="handleClickPlus">
+    <p class="change__count">{{ currentCount }}</p>
+    <AtomButton class="change__btn" @click="handleClickIncrement">
       <img
         class="change__icon"
         src="@/assets/images/icons/fi_plus.svg"
@@ -19,19 +19,29 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, toRefs } from "vue";
 import AtomButton from "../atoms/AtomButton.vue";
 
-//// Заготовка для реализации фичи добавления в корзину и самой корзины
-const count = ref(0);
+interface IMoleculeChangeCountProps {
+  count: number;
+}
 
-const handleClickPlus = () => {
-  count.value++;
+const props = defineProps<IMoleculeChangeCountProps>();
+const { count } = toRefs(props);
+const currentCount = ref(count.value);
+
+const emit = defineEmits(["updateCount"]);
+
+const handleClickDecrement = () => {
+  if (currentCount.value <= 0) return;
+
+  currentCount.value--;
+  emit("updateCount", currentCount.value);
 };
 
-const handleClickMinus = () => {
-  if (count.value <= 0) return;
-  count.value--;
+const handleClickIncrement = () => {
+  currentCount.value++;
+  emit("updateCount", currentCount.value);
 };
 </script>
 
@@ -44,7 +54,6 @@ const handleClickMinus = () => {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-right: 28px;
   }
 
   &__btn {

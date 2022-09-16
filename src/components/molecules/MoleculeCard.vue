@@ -38,8 +38,16 @@
         />
 
         <div class="details__block">
-          <MoleculeChangeCount />
-          <AtomButton class="details__cart-btn">Add to cart</AtomButton>
+          <MoleculeChangeCount
+            :count="currentAmount"
+            @updateCount="handleUpdateCount"
+          />
+          <AtomButton
+            @click="handleAddToCart"
+            :disabled="currentAmount <= 0"
+            class="details__cart-btn"
+            >Add to cart</AtomButton
+          >
         </div>
       </aside>
     </AtomPopup>
@@ -48,7 +56,7 @@
 
 <script lang="ts" setup>
 import { fetchProduct } from "@/utils/api/apiRequests";
-import { computed, ref, toRefs } from "vue";
+import { computed, reactive, ref, toRefs } from "vue";
 import AtomPopup from "@/components/atoms/AtomPopup.vue";
 import AtomButton from "@/components/atoms/AtomButton.vue";
 import AtomAccordion from "@/components/atoms/AtomAccordion.vue";
@@ -58,6 +66,10 @@ import AtomIconFavorite from "@/components/atoms/AtomIconFavorite.vue";
 import MoleculeChangeCount from "@/components/molecules/MoleculeChangeCount.vue";
 import { useProductsStore } from "@/store";
 import { setNewProduct } from "@/utils";
+import { storeToRefs } from "pinia";
+import { useCartStore } from "@/store/useCartStore";
+import { useRouter } from "vue-router";
+import { routePath } from "@/router/route-path";
 
 interface IMoleculeCardProps {
   id: number;
@@ -66,12 +78,20 @@ interface IMoleculeCardProps {
   image: string;
 }
 
+const productStore = useProductsStore();
+const { addToFavorite, removeFromFavorite } = productStore;
+const { favoriteProducts } = storeToRefs(productStore);
+
+const cartStore = useCartStore();
+const { addToCart } = cartStore;
+
 const props = defineProps<IMoleculeCardProps>();
 const { id } = toRefs(props);
 const isShow = ref<boolean>(false);
 const isDescActive = ref<boolean>(true);
 const activeProduct = ref<IProduct>();
-const store = useProductsStore();
+const currentAmount = ref(1);
+const router = useRouter();
 
 const handleClickOnProduct = async () => {
   document.body.style.overflowY = "hidden";
@@ -90,7 +110,7 @@ const handleToggleAccordion = () => {
 };
 
 const currentFavoriteValue = computed(() =>
-  store.favoriteProducts.find(
+  favoriteProducts.value.find(
     (productId) => productId === activeProduct?.value?.id
   )
 );
@@ -99,12 +119,28 @@ const handleAddToFavorite = () => {
   if (!activeProduct.value) return;
 
   if (currentFavoriteValue.value) {
-    store.removeFromFavorite(activeProduct.value.id);
+    removeFromFavorite(activeProduct.value.id);
     activeProduct.value.isLiked = false;
   } else {
-    store.addToFavorite(activeProduct.value.id);
+    addToFavorite(activeProduct.value.id);
     activeProduct.value.isLiked = true;
   }
+};
+
+const handleUpdateCount = (value: number) => {
+  currentAmount.value = value;
+};
+
+const handleAddToCart = () => {
+  if (!activeProduct.value) return;
+
+  const data = reactive({
+    product: activeProduct.value,
+    count: currentAmount.value,
+  });
+  addToCart(data);
+  document.body.style.overflowY = "visible";
+  router.push(routePath.cart.path);
 };
 </script>
 
@@ -211,10 +247,18 @@ const handleAddToFavorite = () => {
     &:active {
       background-color: darken($color-red-2, 10);
     }
+
+    &:disabled {
+      background-color: $color-gray-15;
+      opacity: 0.4;
+      pointer-events: none;
+      cursor: not-allowed;
+    }
   }
 
   &__block {
     display: flex;
+    gap: 28px;
   }
 }
 </style>
