@@ -2,14 +2,17 @@
   <div class="contacts">
     <AtomLink :path="routePath.cart.path" class="contacts__item">
       <img src="@/assets/images/icons/fi_shopping-cart.svg" />
-    </AtomLink>
-    <AtomLink :path="routePath.cart.path" class="contacts__item">
-      <img src="@/assets/images/icons/fi_heart.svg" />
-      <span v-if="favoriteLength" class="contacts__favorite">{{
-        favoriteLength
+      <span v-if="cartLength" class="contacts__notification">{{
+        cartLength
       }}</span>
     </AtomLink>
     <AtomLink :path="routePath.cart.path" class="contacts__item">
+      <img src="@/assets/images/icons/fi_heart.svg" />
+      <span v-if="favoriteLength" class="contacts__notification">{{
+        favoriteLength
+      }}</span>
+    </AtomLink>
+    <AtomLink :path="routePath.home.path" class="contacts__item">
       <img src="@/assets/images/icons/fi_user.svg" />
     </AtomLink>
   </div>
@@ -19,13 +22,22 @@
 import AtomLink from "@/components/atoms/AtomLink.vue";
 import { routePath } from "@/router/route-path";
 import { useProductsStore } from "@/store";
+import { useCartStore } from "@/store/useCartStore";
+import { storeToRefs } from "pinia";
 import { computed } from "vue";
 
-const store = useProductsStore();
+const productStore = useProductsStore();
+const { favoriteProducts } = storeToRefs(productStore);
+
+const cartStore = useCartStore();
+const { cart } = storeToRefs(cartStore);
+
 const favoriteLength = computed(() =>
-  store.favoriteProducts.length > 9
-    ? "..9"
-    : store.favoriteProducts.length
+  favoriteProducts.value.length > 9 ? "..9" : favoriteProducts.value.length
+);
+
+const cartLength = computed(() =>
+  cart.value.length > 9 ? "..9" : cart.value.length
 );
 </script>
 
@@ -43,7 +55,7 @@ const favoriteLength = computed(() =>
     border: 1px solid transparent;
   }
 
-  &__favorite {
+  &__notification {
     position: absolute;
     top: -6px;
     right: -12px;

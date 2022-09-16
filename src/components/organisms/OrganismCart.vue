@@ -1,13 +1,20 @@
 <template>
   <section class="cart">
     <h2 class="cart__title">Your shopping cart</h2>
-    <TransitionGroup tag="ul" name="cart__list" class="cart__list">
+    <TransitionGroup
+      tag="ul"
+      v-if="cart.length"
+      name="cart__list"
+      class="cart__list"
+    >
       <MoleculeCartItem
         v-for="item in cart"
         :key="item.product.id"
         :item="item"
       />
     </TransitionGroup>
+
+    <p v-else class="cart__caption">Cart is empty...</p>
   </section>
 </template>
 
@@ -32,6 +39,12 @@ const { cart } = storeToRefs(cartStore);
 
   &__title {
     @include font_config(400, 2.4rem, 3.2rem);
+
+    color: $color-txt;
+  }
+
+  &__caption {
+    @include font_config(400, 1.8rem, 2.6rem);
 
     color: $color-txt;
   }
