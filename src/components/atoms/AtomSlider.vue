@@ -31,7 +31,7 @@
       <div class="slider__box">
         <ul class="slider__list">
           <li
-            v-for="product in store.currentProducts"
+            v-for="product in currentProducts"
             :key="product.id"
             class="slider__item"
             :class="{ slider__item_active: activeProduct?.id === product.id }"
@@ -52,6 +52,7 @@
 <script lang="ts" setup>
 import { IProduct } from "@/models/product.interfaces";
 import { useProductsStore } from "@/store";
+import { storeToRefs } from "pinia";
 import { toRefs } from "vue";
 import AtomButton from "./AtomButton.vue";
 
@@ -59,9 +60,12 @@ interface IAtomSliderProps {
   activeProduct: IProduct | undefined;
 }
 
-const store = useProductsStore();
+const productStore = useProductsStore();
+const { currentProducts } = storeToRefs(productStore);
+
 const props = defineProps<IAtomSliderProps>();
 const { activeProduct } = toRefs(props);
+
 const emit = defineEmits(["clickOnSlider"]);
 
 const handleClick = (id: number) => emit("clickOnSlider", id);

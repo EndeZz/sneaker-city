@@ -10,6 +10,7 @@ import { defineStore } from "pinia";
 export const useProductsStore = defineStore("products", {
   state: () => ({
     currentProducts: [] as IProduct[],
+    filteredProducts: [] as IProduct[],
     favoriteProducts: getLocalStorage("favorite") as number[],
     isLoading: false,
   }),
@@ -17,6 +18,7 @@ export const useProductsStore = defineStore("products", {
     async updateContentOnPage(category: string) {
       this.isLoading = true;
       this.currentProducts = await fetchProductsByCategory(category);
+      this.filteredProducts = this.currentProducts;
       setNewProducts(this.currentProducts);
       this.isLoading = false;
     },

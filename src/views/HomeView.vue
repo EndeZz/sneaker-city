@@ -5,14 +5,9 @@
     <section class="content">
       <h2 class="content__title">{{ categoryTitle ?? "The new arrivals" }}</h2>
 
-      <TransitionGroup
-        tag="ul"
-        v-if="!store.isLoading"
-        name="cards"
-        class="cards"
-      >
+      <TransitionGroup tag="ul" v-if="!isLoading" name="cards" class="cards">
         <MoleculeCard
-          v-for="product in store.currentProducts"
+          v-for="product in filteredProducts"
           :key="product.id"
           :id="product.id"
           :title="product.title"
@@ -25,7 +20,7 @@
     </section>
   </main>
 
-  <AtomPopup :isShow="store.isLoading" bg="popup__loader">
+  <AtomPopup :isShow="isLoading" bg="popup__loader">
     <AtomLoader />
   </AtomPopup>
 </template>
@@ -40,8 +35,12 @@ import AtomPopup from "@/components/atoms/AtomPopup.vue";
 import AtomLoader from "@/components/atoms/AtomLoader.vue";
 import { IFilteredProducts } from "@/models/product.interfaces";
 import { useProductsStore } from "@/store/useProductsStore";
+import { storeToRefs } from "pinia";
 
-const store = useProductsStore();
+const productStore = useProductsStore();
+const { updateContentOnPage } = productStore;
+const { filteredProducts, currentProducts, isLoading } = storeToRefs(productStore);
+
 const route = useRoute();
 
 const categoryName = computed(() => route.params.category as string);
@@ -52,7 +51,7 @@ const categoryTitle = computed(
 );
 
 const handleFilterProducts = (filterOptions: IFilteredProducts) => {
-  store.currentProducts = store.currentProducts.filter(
+  filteredProducts.value = currentProducts.value.filter(
     (product) =>
       product.price >= filterOptions.price[0] &&
       product.price <= filterOptions.price[1] &&
@@ -60,21 +59,25 @@ const handleFilterProducts = (filterOptions: IFilteredProducts) => {
   );
 };
 
-onMounted(() => store.updateContentOnPage(categoryName.value));
-watch(categoryName, () => store.updateContentOnPage(categoryName.value));
+onMounted(() => updateContentOnPage(categoryName.value));
+watch(categoryName, () => updateContentOnPage(categoryName.value));
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@/styles/variables.scss";
 @import "@/styles/mixins.scss";
 
 .main {
   display: flex;
+  flex: 1 0 auto;
   width: 100%;
   overflow: hidden;
 }
 
 .content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 100%;
   padding-top: 32px;
   padding-left: 64px;
