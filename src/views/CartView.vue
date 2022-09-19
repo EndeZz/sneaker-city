@@ -22,11 +22,15 @@ import OrganismFooter from "@/components/organisms/OrganismFooter.vue";
 
 .main {
   padding: 26px 32px 18px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 
   &__wrapper {
     display: flex;
     justify-content: space-between;
     gap: 64px;
+    flex: 1 0 auto;
   }
 }
 </style>

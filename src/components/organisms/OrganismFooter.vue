@@ -51,9 +51,7 @@
       </div>
     </div>
 
-    <div class="footer__copyright">
-      <p class="footer__caption">Copyright 2021 © Sneaker City ltd</p>
-    </div>
+    <p class="footer__copyright">Copyright 2021 © Sneaker City ltd</p>
   </footer>
 </template>
 
@@ -67,7 +65,7 @@
   @include font_config(400, 1.6rem, 2.4rem);
 
   display: grid;
-  grid-template-columns: auto 212px;
+  grid-template-columns: auto 250px;
   justify-content: space-between;
   align-items: center;
   margin-top: 92px;
@@ -82,10 +80,14 @@
   }
 
   &__copyright {
+    @include font_config(400, 1.4rem, 1.8rem);
+
     margin-right: 30px;
   }
 
   &__info {
+    @include font_config(400, 1.4rem, 1.8rem);
+
     display: flex;
     align-items: center;
     gap: 12px;

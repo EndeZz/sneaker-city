@@ -69,11 +69,15 @@ watch(categoryName, () => updateContentOnPage(categoryName.value));
 
 .main {
   display: flex;
+  flex: 1 0 auto;
   width: 100%;
   overflow: hidden;
 }
 
 .content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 100%;
   padding-top: 32px;
   padding-left: 64px;

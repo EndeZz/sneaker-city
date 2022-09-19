@@ -48,6 +48,7 @@ body {
   font-family: $font-google;
   background-color: $color-white;
   color: $color-txt;
+  height: 100%;
 }
 
 ul {
@@ -60,6 +61,12 @@ input {
   font-family: inherit;
   margin: 0;
   transition: 0.2s;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .container {
