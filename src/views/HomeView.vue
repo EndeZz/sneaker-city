@@ -7,7 +7,7 @@
 
       <TransitionGroup tag="ul" v-if="!isLoading" name="cards" class="cards">
         <MoleculeCard
-          v-for="product in currentProducts"
+          v-for="product in filteredProducts"
           :key="product.id"
           :id="product.id"
           :title="product.title"
@@ -39,7 +39,7 @@ import { storeToRefs } from "pinia";
 
 const productStore = useProductsStore();
 const { updateContentOnPage } = productStore;
-const { currentProducts, isLoading } = storeToRefs(productStore);
+const { filteredProducts, currentProducts, isLoading } = storeToRefs(productStore);
 
 const route = useRoute();
 
@@ -51,7 +51,7 @@ const categoryTitle = computed(
 );
 
 const handleFilterProducts = (filterOptions: IFilteredProducts) => {
-  currentProducts.value = currentProducts.value.filter(
+  filteredProducts.value = currentProducts.value.filter(
     (product) =>
       product.price >= filterOptions.price[0] &&
       product.price <= filterOptions.price[1] &&
